@@ -2,7 +2,8 @@
 <html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="Santuario Virtual Nuestra Señora de las Misericordias. Peregrinación virtual, oración y muro de intenciones.">
     <title>Santuario Virtual | Nuestra Señora de las Misericordias</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -10,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     
     <!-- Three.js para animaciones 3D de partículas -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
     
     <script>
         tailwind.config = {
@@ -104,23 +105,27 @@
             border-radius: 2px;
         }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f0f7ff; }
-        ::-webkit-scrollbar-thumb { background: #7cc7fd; border-radius: 4px; }
+        /* Scrollbar adaptada para móvil y escritorio */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #7cc7fd; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #36a9fa; }
+        
+        /* Prevenir scroll horizontal indeseado en móviles */
+        body { overflow-x: hidden; }
     </style>
 </head>
 <body class="font-sans bg-marian-50 text-marian-900 antialiased selection:bg-marian-300 selection:text-white">
 
     <!-- Canvas para Polvo Dorado 3D -->
-    <canvas id="bg-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-[100]"></canvas>
+    <canvas id="bg-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-[100]" aria-hidden="true"></canvas>
 
-    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none" aria-live="polite"></div>
 
-    <header class="relative h-screen flex items-center justify-center overflow-hidden">
+    <header class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <img src="https://images.pexels.com/photos/38179003/pexels-photo-38179003.png" alt="Fondo Santuario" class="w-full h-full object-cover object-center opacity-70">
+            <!-- Fetch priority para hero image -->
+            <img src="https://images.pexels.com/photos/38179003/pexels-photo-38179003.png" fetchpriority="high" alt="Fondo Santuario" class="w-full h-full object-cover object-center opacity-70">
             <div class="absolute inset-0 bg-gradient-to-b from-marian-900/70 via-marian-800/50 to-marian-50"></div>
         </div>
         
@@ -132,153 +137,151 @@
             <p class="text-marian-50 text-lg md:text-xl font-light mb-10 max-w-2xl mx-auto drop-shadow-md">
                 Un viaje de fe, historia y devoción en el corazón de Antioquia.
             </p>
-            <a href="#oracion" class="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/40 text-white px-8 py-3 rounded-full transition-all duration-300 hover:scale-105 shadow-xl relative z-20">
+            <a href="#oracion" class="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/40 text-white px-8 py-4 md:py-3 rounded-full transition-all duration-300 hover:scale-105 shadow-xl relative z-20 focus:ring-2 focus:ring-white focus:outline-none">
                 <span>Comenzar Peregrinación</span>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 animate-bounce mt-1" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 animate-bounce mt-1" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path fill-rule="evenodd" d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                 </svg>
             </a>
         </div>
     </header>
 
-    <section id="oracion" class="py-24 px-6 relative bg-marian-50 overflow-hidden">
-        <!-- Imagen de textura suave de fondo -->
+    <section id="oracion" class="py-20 md:py-24 px-6 relative bg-marian-50 overflow-hidden">
         <div class="absolute inset-0 z-0 opacity-[0.07] pointer-events-none">
-            <img src="https://images.pexels.com/photos/39230679/pexels-photo-39230679.png" class="w-full h-full object-cover mix-blend-multiply" alt="Textura">
+            <img src="https://images.pexels.com/photos/39230679/pexels-photo-39230679.png" loading="lazy" class="w-full h-full object-cover mix-blend-multiply" alt="" aria-hidden="true">
         </div>
         
         <div class="max-w-4xl mx-auto text-center reveal relative z-10">
-            <div class="inline-block mb-4 text-marian-400">
+            <div class="inline-block mb-4 text-marian-400" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M8 6h8"/></svg>
             </div>
-            <h2 class="text-3xl md:text-4xl font-display text-marian-900 mb-10">Oración de Preparación</h2>
+            <h2 class="text-3xl md:text-4xl font-display text-marian-900 mb-8 md:mb-10">Oración de Preparación</h2>
             
-            <div class="bg-white/80 backdrop-blur-sm p-8 md:p-12 rounded-3xl shadow-xl shadow-marian-200/50 relative overflow-hidden text-left border border-white">
-                <div class="absolute top-0 right-0 -mt-10 -mr-10 text-marian-100 opacity-50 pointer-events-none">
+            <div class="bg-white/80 backdrop-blur-sm p-6 md:p-12 rounded-3xl shadow-xl shadow-marian-200/50 relative overflow-hidden text-left border border-white">
+                <div class="absolute top-0 right-0 -mt-10 -mr-10 text-marian-100 opacity-50 pointer-events-none" aria-hidden="true">
                     <svg width="200" height="200" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
                 </div>
                 
-                <p class="font-serif text-lg md:text-xl leading-relaxed text-marian-800 relative z-10 columns-1 md:columns-2 gap-8">
-                    <span class="text-5xl font-display float-left mr-3 text-marian-600 leading-none">O</span>h Reina de las Misericordias, Inmaculada Virgen María, Madre de Dios y Madre mía, heme aquí postrado a vuestros pies santísimos. Vengo lleno de confianza a implorar vuestra gran misericordia para el remedio de mis muchas y grandes necesidades de alma y cuerpo. 
-                    <br><br>
-                    Acordaos, benditísima Señora, del Hijo Santísimo que llevasteis por nueve meses en vuestras purísimas entrañas, recostasteis en las pajas del pesebre, alimentasteis con vuestra leche virginal y reclinasteis en vuestro regazo. Acordaos de las tiernas caricias que durante su infancia le prodigasteis y del poder que como madre tuvisteis sobre su corazón divino.
-                    <br><br>
-                    Acordaos de vuestros dolores y angustias durante su santísima pasión y de vuestros sufrimientos infinitos al pie de la cruz. Acordaos de que nos fuisteis dada por Madre por vuestro Hijo moribundo; Acordaos de vuestros dolores indecibles, cuando le tuvisteis ya muerto en vuestros brazos maternales.
-                    <br><br>
-                    Acordaos de las lágrimas que vertisteis al dejarlo bajo la losa del sepulcro y regresar sola sin vuestro Jesús, envuelta en la nube triste de vuestra amarga soledad. Acordaos de vuestra infinita alegría al verle el día de la resurrección, triunfante y glorioso y de la felicidad de que disfrutáis ahora en el cielo como Reina sentada a su derecha. 
-                    <br><br>
-                    Acordaos, en fin, Señora, de que sois Madre y Madre de misericordia, escuchad benigna mis súplicas y concededme, os lo suplico, la gracia que vengo a implorar rendido a vuestras plantas benditas, oh Señora, oh Reina, oh Madre de las Misericordias. <strong>Amén.</strong>
-                </p>
+                <div class="font-serif text-base md:text-xl leading-relaxed text-marian-800 relative z-10 columns-1 md:columns-2 gap-8">
+                    <p class="mb-4">
+                        <span class="text-5xl font-display float-left mr-3 text-marian-600 leading-none">O</span>h Reina de las Misericordias, Inmaculada Virgen María, Madre de Dios y Madre mía, heme aquí postrado a vuestros pies santísimos. Vengo lleno de confianza a implorar vuestra gran misericordia para el remedio de mis muchas y grandes necesidades de alma y cuerpo.
+                    </p>
+                    <p class="mb-4">
+                        Acordaos, benditísima Señora, del Hijo Santísimo que llevasteis por nueve meses en vuestras purísimas entrañas, recostasteis en las pajas del pesebre, alimentasteis con vuestra leche virginal y reclinasteis en vuestro regazo. Acordaos de las tiernas caricias que durante su infancia le prodigasteis y del poder que como madre tuvisteis sobre su corazón divino.
+                    </p>
+                    <p class="mb-4">
+                        Acordaos de vuestros dolores y angustias durante su santísima pasión y de vuestros sufrimientos infinitos al pie de la cruz. Acordaos de que nos fuisteis dada por Madre por vuestro Hijo moribundo; Acordaos de vuestros dolores indecibles, cuando le tuvisteis ya muerto en vuestros brazos maternales.
+                    </p>
+                    <p class="mb-4">
+                        Acordaos de las lágrimas que vertisteis al dejarlo bajo la losa del sepulcro y regresar sola sin vuestro Jesús, envuelta en la nube triste de vuestra amarga soledad. Acordaos de vuestra infinita alegría al verle el día de la resurrección, triunfante y glorioso y de la felicidad de que disfrutáis ahora en el cielo como Reina sentada a su derecha.
+                    </p>
+                    <p class="mb-0">
+                        Acordaos, en fin, Señora, de que sois Madre y Madre de misericordia, escuchad benigna mis súplicas y concededme, os lo suplico, la gracia que vengo a implorar rendido a vuestras plantas benditas, oh Señora, oh Reina, oh Madre de las Misericordias. <strong>Amén.</strong>
+                    </p>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="py-24 bg-zinc-900 relative border-t-8 border-marian-900">
+    <section class="py-20 md:py-24 bg-zinc-900 relative border-t-8 border-marian-900">
         <div class="absolute inset-0 z-0 bg-marian-900/30"></div>
         
         <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <div class="text-center mb-16 reveal">
+            <div class="text-center mb-12 md:mb-16 reveal">
                 <h2 class="text-3xl md:text-5xl font-display text-yellow-500 mb-4 tracking-wide">Galería de Devoción</h2>
-                <p class="text-zinc-300 font-light text-lg">Retazos visuales de fe, contemplación y paz espiritual.</p>
+                <p class="text-zinc-300 font-light text-base md:text-lg">Retazos visuales de fe, contemplación y paz espiritual.</p>
                 <div class="h-1 w-24 bg-yellow-600/50 mx-auto mt-6 rounded"></div>
             </div>
 
-            <!-- Grid de Imágenes Enmarcadas -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-14">
-                
-                <!-- Cuadro 1 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-14">
+                <!-- Lazy loading añadido a las imágenes -->
                 <div class="reveal gold-frame transform transition duration-500 hover:-translate-y-2 hover:scale-[1.02]">
                     <div class="gold-frame-inner h-full flex flex-col">
-                        <img src="https://images.pexels.com/photos/39230678/pexels-photo-39230678.png" alt="Devoción 1" class="w-full h-80 object-cover opacity-90 hover:opacity-100 transition-opacity duration-300">
+                        <img src="https://images.pexels.com/photos/39230678/pexels-photo-39230678.png" loading="lazy" alt="Devoto en oración" class="w-full h-72 md:h-80 object-cover opacity-90 hover:opacity-100 transition-opacity duration-300">
                     </div>
                 </div>
 
-                <!-- Cuadro 2 -->
                 <div class="reveal gold-frame transform transition duration-500 hover:-translate-y-2 hover:scale-[1.02]" style="transition-delay: 100ms;">
                     <div class="gold-frame-inner h-full flex flex-col">
-                        <img src="https://images.pexels.com/photos/39230677/pexels-photo-39230677.png" alt="Devoción 2" class="w-full h-80 object-cover opacity-90 hover:opacity-100 transition-opacity duration-300">
+                        <img src="https://images.pexels.com/photos/39230677/pexels-photo-39230677.png" loading="lazy" alt="Detalle del altar" class="w-full h-72 md:h-80 object-cover opacity-90 hover:opacity-100 transition-opacity duration-300">
                     </div>
                 </div>
 
-                <!-- Cuadro 3 -->
                 <div class="reveal gold-frame transform transition duration-500 hover:-translate-y-2 hover:scale-[1.02]" style="transition-delay: 200ms;">
                     <div class="gold-frame-inner h-full flex flex-col">
-                        <img src="https://images.pexels.com/photos/39230676/pexels-photo-39230676.png" alt="Devoción 3" class="w-full h-80 object-cover opacity-90 hover:opacity-100 transition-opacity duration-300">
+                        <img src="https://images.pexels.com/photos/39230676/pexels-photo-39230676.png" loading="lazy" alt="Santuario iluminado" class="w-full h-72 md:h-80 object-cover opacity-90 hover:opacity-100 transition-opacity duration-300">
                     </div>
                 </div>
 
-                <!-- Cuadro 4 -->
                 <div class="reveal gold-frame transform transition duration-500 hover:-translate-y-2 hover:scale-[1.02]">
                     <div class="gold-frame-inner h-full flex flex-col">
-                        <img src="https://images.pexels.com/photos/39230675/pexels-photo-39230675.png" alt="Devoción 4" class="w-full h-80 object-cover object-bottom opacity-90 hover:opacity-100 transition-opacity duration-300">
+                        <img src="https://images.pexels.com/photos/39230675/pexels-photo-39230675.png" loading="lazy" alt="Peregrinos llegando al santuario" class="w-full h-72 md:h-80 object-cover object-bottom opacity-90 hover:opacity-100 transition-opacity duration-300">
                     </div>
                 </div>
 
-                <!-- Cuadro 5 -->
                 <div class="reveal gold-frame transform transition duration-500 hover:-translate-y-2 hover:scale-[1.02]" style="transition-delay: 100ms;">
                     <div class="gold-frame-inner h-full flex flex-col">
-                        <img src="https://images.pexels.com/photos/39230618/pexels-photo-39230618.png" alt="Devoción 5" class="w-full h-80 object-cover opacity-90 hover:opacity-100 transition-opacity duration-300">
+                        <img src="https://images.pexels.com/photos/39230618/pexels-photo-39230618.png" loading="lazy" alt="Velas encendidas" class="w-full h-72 md:h-80 object-cover opacity-90 hover:opacity-100 transition-opacity duration-300">
                     </div>
                 </div>
 
-                <!-- Cuadro 6 -->
                 <div class="reveal gold-frame transform transition duration-500 hover:-translate-y-2 hover:scale-[1.02]" style="transition-delay: 200ms;">
                     <div class="gold-frame-inner h-full flex flex-col">
-                        <img src="https://images.pexels.com/photos/39230601/pexels-photo-39230601.png" alt="Devoción 6" class="w-full h-80 object-cover opacity-90 hover:opacity-100 transition-opacity duration-300">
+                        <img src="https://images.pexels.com/photos/39230601/pexels-photo-39230601.png" loading="lazy" alt="Imagen de la Virgen" class="w-full h-72 md:h-80 object-cover opacity-90 hover:opacity-100 transition-opacity duration-300">
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
 
-    <section class="py-12 bg-marian-900 relative bg-fixed bg-cover bg-center" style="background-image: url('https://images.pexels.com/photos/39230675/pexels-photo-39230675.png');">
-        <!-- Capas de superposición para que el texto resalte sobre la foto -->
-        <div class="absolute inset-0 bg-marian-900/85 z-0"></div>
+    <!-- Parallax desactivado en móviles nativamente por CSS pero optimizado para no saltar -->
+    <section class="py-16 md:py-24 bg-marian-900 relative bg-fixed bg-cover bg-center" style="background-image: url('https://images.pexels.com/photos/39230675/pexels-photo-39230675.png');">
+        <div class="absolute inset-0 bg-marian-900/90 md:bg-marian-900/85 z-0"></div>
         <div class="absolute top-0 left-0 w-full h-16 bg-gradient-to-b from-zinc-900 to-transparent z-10"></div>
         
-        <div class="max-w-6xl mx-auto px-6 pt-16 relative z-10">
+        <div class="max-w-6xl mx-auto px-6 relative z-10">
             <div class="text-center mb-16 reveal">
                 <h2 class="text-3xl md:text-5xl font-display text-white mb-4">El Camino del Peregrino</h2>
-                <p class="text-marian-200 font-light text-lg">Recorramos la historia de devoción paso a paso.</p>
+                <p class="text-marian-200 font-light text-base md:text-lg">Recorramos la historia de devoción paso a paso.</p>
             </div>
 
             <!-- Etapa 1 -->
-            <div class="flex flex-col md:flex-row gap-8 items-center mb-24 reveal">
+            <div class="flex flex-col md:flex-row gap-8 items-center mb-20 md:mb-24 reveal">
                 <div class="w-full md:w-1/2 order-2 md:order-1">
-                    <div class="aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-marian-700/50">
-                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/40awcPEq0xc" title="Video 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <!-- Lazy Loading en Iframes -->
+                    <div class="aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-marian-700/50 bg-black">
+                        <iframe loading="lazy" class="w-full h-full" src="https://www.youtube.com/embed/40awcPEq0xc" title="Historia: El Origen y la Virgen Blanca" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 </div>
                 <div class="w-full md:w-1/2 order-1 md:order-2 text-white">
-                    <span class="inline-block px-4 py-1 rounded-full bg-marian-700 text-marian-100 text-sm font-semibold mb-4 tracking-wider uppercase">Primera Estación</span>
-                    <h3 class="text-3xl font-display mb-4 text-marian-100">El Origen y la "Virgen Blanca"</h3>
+                    <span class="inline-block px-4 py-1 rounded-full bg-marian-700 text-marian-100 text-xs md:text-sm font-semibold mb-4 tracking-wider uppercase">Primera Estación</span>
+                    <h3 class="text-2xl md:text-3xl font-display mb-4 text-marian-100">El Origen y la "Virgen Blanca"</h3>
                     <p class="font-serif text-marian-100/80 italic mb-4">"Una necesidad de recuerdo se convirtió en semilla de fe."</p>
-                    <p class="text-marian-50 font-light leading-relaxed">
+                    <p class="text-marian-50 font-light leading-relaxed text-sm md:text-base">
                         En julio de 1919, con ocasión de la Solemne Coronación canónica de la Imagen de nuestra Señora del Rosario de Chiquinquirá, se celebró un congreso Mariano Nacional. El Ilustrísimo Señor Maximiliano Crespo Rivera, obispo de Santa Rosa de Osos, viendo la necesidad de que quedara un recuerdo de dicho acontecimiento, solicitó la creación de la imagen al escultor donmatieño Álvaro Carvajal.
                     </p>
-                    <p class="text-marian-50 font-light leading-relaxed mt-4">
-                        La imagen resultó artística, hermosa y original, pues sus lineamientos no son comunes a las demás. Fue inaugurada en la Plazoleta de San Ignacio. Desde aquella fecha, la sagrada imagen se convirtió en lugar de constante oración y sitio de peregrinación para venerar a la entonces llamada "Virgen Blanca" o "Virgen del Seminario".
+                    <p class="text-marian-50 font-light leading-relaxed mt-4 text-sm md:text-base">
+                        La imagen resultó artística, hermosa y original. Desde aquella fecha, se convirtió en lugar de constante oración y sitio de peregrinación para venerar a la entonces llamada "Virgen Blanca" o "Virgen del Seminario".
                     </p>
                 </div>
             </div>
 
             <!-- Etapa 2 -->
-            <div class="flex flex-col md:flex-row gap-8 items-center mb-24 reveal">
+            <div class="flex flex-col md:flex-row gap-8 items-center mb-20 md:mb-24 reveal">
                 <div class="w-full md:w-1/2 text-white">
-                    <span class="inline-block px-4 py-1 rounded-full bg-marian-700 text-marian-100 text-sm font-semibold mb-4 tracking-wider uppercase">Segunda Estación</span>
-                    <h3 class="text-3xl font-display mb-4 text-marian-100">La Fe, el Milagro y la Propagación</h3>
+                    <span class="inline-block px-4 py-1 rounded-full bg-marian-700 text-marian-100 text-xs md:text-sm font-semibold mb-4 tracking-wider uppercase">Segunda Estación</span>
+                    <h3 class="text-2xl md:text-3xl font-display mb-4 text-marian-100">La Fe, el Milagro y la Propagación</h3>
                     <p class="font-serif text-marian-100/80 italic mb-4">"No se veía sola la imagen ni un solo instante."</p>
-                    <p class="text-marian-50 font-light leading-relaxed">
-                        Según la tradición, una mujer distinguidísima de la ciudadanía santarrosana, sufría de una enfermedad que la aquejaba desde hacía tiempo. Asistía piadosa a las oraciones frente a la imagen, y al fin recuperó la salud en el mismo lugar. Este favor se conoció por todos los poblados, acarreando romerías y peregrinaciones masivas.
+                    <p class="text-marian-50 font-light leading-relaxed text-sm md:text-base">
+                        Según la tradición, una mujer distinguidísima de la ciudadanía santarrosana, sufría de una enfermedad que la aquejaba desde hacía tiempo. Asistía piadosa a las oraciones frente a la imagen, y al fin recuperó la salud en el mismo lugar. Este favor se conoció por todos los poblados, acarreando romerías masivas.
                     </p>
-                    <p class="text-marian-50 font-light leading-relaxed mt-4">
-                        El sacerdote eudista José Tressel, viendo la intensidad de la plegaria, empezó a difundir con oraciones el culto. Para finalizar la segunda década del siglo XIX, la devoción ya era conocida en casi todos los pueblos de Antioquia, envolviendo con su manto de sanación a campesinos y citadinos por igual.
+                    <p class="text-marian-50 font-light leading-relaxed mt-4 text-sm md:text-base">
+                        El sacerdote eudista José Tressel empezó a difundir con oraciones el culto. Para finalizar la segunda década del siglo XIX, la devoción ya era conocida en casi todos los pueblos de Antioquia.
                     </p>
                 </div>
                 <div class="w-full md:w-1/2">
-                    <div class="aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-marian-700/50 relative group">
-                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/dedMLFpZIFo" title="Video 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <div class="aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-marian-700/50 bg-black">
+                        <iframe loading="lazy" class="w-full h-full" src="https://www.youtube.com/embed/dedMLFpZIFo" title="Historia: La Fe y el Milagro" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 </div>
             </div>
@@ -286,23 +289,20 @@
             <!-- Etapa 3 -->
             <div class="flex flex-col md:flex-row gap-8 items-center reveal">
                 <div class="w-full md:w-1/2 order-2 md:order-1">
-                    <div class="aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-marian-700/50">
-                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/UbNFcICJyEU" title="Video 3" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <div class="aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-marian-700/50 bg-black">
+                        <iframe loading="lazy" class="w-full h-full" src="https://www.youtube.com/embed/UbNFcICJyEU" title="Historia: El Título de las Misericordias" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 </div>
                 <div class="w-full md:w-1/2 order-1 md:order-2 text-white">
-                    <span class="inline-block px-4 py-1 rounded-full bg-marian-700 text-marian-100 text-sm font-semibold mb-4 tracking-wider uppercase">Tercera Estación</span>
-                    <h3 class="text-3xl font-display mb-4 text-marian-100">El Título de las Misericordias</h3>
-                    <p class="font-serif text-marian-100/80 italic mb-4">"Madre Amabilísima de Cristo y Madre Protectora..."</p>
-                    <p class="text-marian-50 font-light leading-relaxed">
-                        Fue el obispo Miguel Ángel Builes su principal promotor, quien oficializó el culto público el 8 de septiembre de 1931. Para darle un título oficial, los sacerdotes José Manuel Castrillón y Roberto Giraldo sugirieron un concurso masivo, dando como resultado la advocación que hoy amamos: <strong>Nuestra Señora de las Misericordias</strong>.
+                    <span class="inline-block px-4 py-1 rounded-full bg-marian-700 text-marian-100 text-xs md:text-sm font-semibold mb-4 tracking-wider uppercase">Tercera Estación</span>
+                    <h3 class="text-2xl md:text-3xl font-display mb-4 text-marian-100">El Título de las Misericordias</h3>
+                    <p class="font-serif text-marian-100/80 italic mb-4">"Madre Amabilísima de Cristo..."</p>
+                    <p class="text-marian-50 font-light leading-relaxed text-sm md:text-base">
+                        Fue el obispo Miguel Ángel Builes su principal promotor, quien oficializó el culto público el 8 de septiembre de 1931. Mediante un concurso masivo, se dio como resultado la advocación que hoy amamos: <strong>Nuestra Señora de las Misericordias</strong>.
                     </p>
                     <blockquote class="mt-4 border-l-4 border-marian-400 pl-4 text-marian-200 italic font-serif text-sm">
-                        "...que Ella derrame sus bendiciones sobre todos aquellos que la invoquen y envuelva entre los pliegues de su manto a este su esclavo que tanto la quiere..." <br> <span class="not-italic text-xs mt-1 block font-sans text-marian-300">- Monseñor Builes, 1931</span>
+                        "...que Ella derrame sus bendiciones sobre todos aquellos que la invoquen..." <br> <span class="not-italic text-xs mt-1 block font-sans text-marian-300">- Monseñor Builes, 1931</span>
                     </blockquote>
-                    <p class="text-marian-50 font-light leading-relaxed mt-4">
-                        Como confirmación de esta inmensa fe, el 22 de febrero de 1985, la Santa Sede aprobó el rango litúrgico de solemnidad para su fiesta.
-                    </p>
                 </div>
             </div>
         </div>
@@ -310,51 +310,56 @@
         <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-marian-100 to-transparent z-10"></div>
     </section>
 
-    <section class="py-20 bg-marian-100 text-center relative overflow-hidden bg-fixed bg-cover bg-center" style="background-image: url('https://images.pexels.com/photos/39230618/pexels-photo-39230618.png');">
-        <!-- Capa de superposición clara -->
-        <div class="absolute inset-0 bg-marian-100/90 z-0"></div>
+    <section class="py-16 md:py-20 bg-marian-100 text-center relative overflow-hidden bg-fixed bg-cover bg-center" style="background-image: url('https://images.pexels.com/photos/39230618/pexels-photo-39230618.png');">
+        <div class="absolute inset-0 bg-marian-100/95 md:bg-marian-100/90 z-0"></div>
 
-        <div class="absolute -left-20 top-10 w-64 h-64 bg-marian-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-float z-0"></div>
-        <div class="absolute -right-20 bottom-10 w-64 h-64 bg-marian-300 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-float z-0" style="animation-delay: 2s;"></div>
+        <div class="absolute -left-10 md:-left-20 top-10 w-48 md:w-64 h-48 md:h-64 bg-marian-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-float z-0"></div>
+        <div class="absolute -right-10 md:-right-20 bottom-10 w-48 md:w-64 h-48 md:h-64 bg-marian-300 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-float z-0" style="animation-delay: 2s;"></div>
 
         <div class="max-w-4xl mx-auto px-6 relative z-10 reveal">
-            <h2 class="text-3xl md:text-5xl font-display text-marian-900 mb-6 drop-shadow-sm">Himno de Alabanza</h2>
-            <p class="text-marian-800 mb-10 font-serif text-lg font-medium">Elevemos nuestros corazones mediante la música, uniendo nuestras voces en gratitud.</p>
+            <h2 class="text-3xl md:text-5xl font-display text-marian-900 mb-4 drop-shadow-sm">Himno de Alabanza</h2>
+            <p class="text-marian-800 mb-8 md:mb-10 font-serif text-base md:text-lg font-medium">Elevemos nuestros corazones mediante la música.</p>
             
-            <div class="bg-white/90 backdrop-blur-md p-4 rounded-3xl shadow-xl max-w-3xl mx-auto border border-marian-200">
+            <div class="bg-white/90 backdrop-blur-md p-3 md:p-4 rounded-3xl shadow-xl max-w-3xl mx-auto border border-marian-200">
                 <div class="aspect-video rounded-2xl overflow-hidden bg-marian-900">
-                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/q9y5ka8NjEU" title="Himno a Nuestra Señora" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <iframe loading="lazy" class="w-full h-full" src="https://www.youtube.com/embed/q9y5ka8NjEU" title="Himno a Nuestra Señora" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="santuario" class="py-24 bg-marian-900 text-white relative overflow-hidden">
-        
-        <!-- Imagen fotográfica al fondo del santuario -->
+    <section id="santuario" class="py-20 md:py-24 bg-marian-900 text-white relative overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <img src="https://images.pexels.com/photos/39230596/pexels-photo-39230596.png" class="w-full h-full object-cover opacity-[0.15] mix-blend-screen" alt="Fondo Santuario Interior">
+            <img src="https://images.pexels.com/photos/39230596/pexels-photo-39230596.png" loading="lazy" class="w-full h-full object-cover opacity-[0.15] mix-blend-screen" alt="" aria-hidden="true">
             <div class="absolute inset-0 bg-gradient-to-t from-marian-900 via-transparent to-marian-900/50"></div>
         </div>
 
         <div class="max-w-6xl mx-auto px-6 relative z-10">
-            <div class="text-center mb-16 reveal">
-                <h2 class="text-4xl md:text-5xl font-display mb-4 text-white drop-shadow-md">El Santuario Virtual</h2>
-                <p class="text-marian-100 font-light text-xl max-w-2xl mx-auto drop-shadow">Enciende una vela real en tu corazón y deja tu intención a los pies de la Madre de las Misericordias.</p>
+            <div class="text-center mb-12 md:mb-16 reveal">
+                <h2 class="text-3xl md:text-5xl font-display mb-4 text-white drop-shadow-md">El Santuario Virtual</h2>
+                <p class="text-marian-100 font-light text-base md:text-xl max-w-2xl mx-auto drop-shadow">Enciende una vela en tu corazón y deja tu intención a los pies de la Madre.</p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
                 <!-- Columna de la Vela -->
                 <div class="lg:col-span-5 flex flex-col items-center justify-center reveal">
-                    <div class="glass bg-black/20 p-10 rounded-3xl text-center w-full relative shadow-2xl border-white/10">
-                        <h3 class="text-2xl font-serif mb-6 text-white drop-shadow">Luz de Esperanza</h3>
-                        <p class="text-marian-100 text-sm mb-8 drop-shadow">Haz clic sobre la vela para encenderla como símbolo de tu plegaria.</p>
+                    <div class="glass bg-black/20 p-8 md:p-10 rounded-3xl text-center w-full relative shadow-2xl border-white/10">
+                        <h3 class="text-2xl font-serif mb-4 md:mb-6 text-white drop-shadow">Luz de Esperanza</h3>
+                        <p class="text-marian-100 text-sm mb-6 md:mb-8 drop-shadow">Toca la vela para encenderla como símbolo de tu plegaria.</p>
                         
-                        <!-- Contenedor Interactivo de la Vela -->
-                        <div id="candle-container" class="cursor-pointer mx-auto w-48 h-64 relative flex justify-center items-end" onclick="lightCandle()">
-                            <div class="candle-halo absolute top-0 left-1/2 transform -translate-x-1/2 w-48 h-48 bg-yellow-400 rounded-full filter blur-[50px] pointer-events-none"></div>
+                        <!-- Accesibilidad: role="button" y tabindex para control por teclado -->
+                        <div id="candle-container" 
+                             role="button" 
+                             tabindex="0" 
+                             aria-pressed="false"
+                             aria-label="Encender vela virtual"
+                             class="cursor-pointer mx-auto w-40 md:w-48 h-56 md:h-64 relative flex justify-center items-end outline-none focus-visible:ring-4 focus-visible:ring-marian-300 rounded-xl" 
+                             onclick="lightCandle()"
+                             onkeydown="if(event.key === 'Enter' || event.key === ' ') { event.preventDefault(); lightCandle(); }">
+                             
+                            <div class="candle-halo absolute top-0 left-1/2 transform -translate-x-1/2 w-40 md:w-48 h-40 md:h-48 bg-yellow-400 rounded-full filter blur-[50px] pointer-events-none"></div>
                             
-                            <svg width="100%" height="100%" viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg" class="relative z-10 overflow-visible">
+                            <svg width="100%" height="100%" viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg" class="relative z-10 overflow-visible" aria-hidden="true">
                                 <path d="M20 180 Q50 190 80 180 L85 195 Q50 205 15 195 Z" fill="#94a3b8" />
                                 <rect x="30" y="170" width="40" height="10" fill="#cbd5e1" rx="2" />
                                 
@@ -375,43 +380,42 @@
                             </svg>
                         </div>
                         
-                        <p id="candle-status" class="mt-8 text-marian-100 font-medium h-6 transition-all duration-300 drop-shadow">Vela apagada</p>
+                        <p id="candle-status" aria-live="polite" class="mt-6 md:mt-8 text-marian-100 font-medium h-6 transition-all duration-300 drop-shadow text-sm md:text-base">Vela apagada</p>
                     </div>
                 </div>
 
                 <!-- Columna del Muro de Intenciones -->
                 <div class="lg:col-span-7 flex flex-col reveal" style="transition-delay: 200ms;">
-                    <div class="glass bg-black/20 p-8 md:p-10 rounded-3xl h-full flex flex-col shadow-2xl border-white/10">
+                    <div class="glass bg-black/20 p-6 md:p-10 rounded-3xl h-full flex flex-col shadow-2xl border-white/10">
                         <h3 class="text-2xl font-serif mb-2 text-white drop-shadow">Muro de Peticiones</h3>
-                        <p class="text-marian-100 text-sm mb-6 drop-shadow">Deja tu intención. Quedará depositada en este santuario virtual.</p>
+                        <p class="text-marian-100 text-sm mb-6 drop-shadow">Quedará depositada en este santuario virtual.</p>
                         
-                        <!-- Formulario -->
-                        <form id="intention-form" class="mb-8 relative z-20" onsubmit="submitIntention(event)">
+                        <form id="intention-form" class="mb-6 relative z-20" onsubmit="submitIntention(event)">
                             <div class="mb-4">
                                 <label for="author" class="block text-sm font-medium text-marian-100 mb-1 drop-shadow">Tu Nombre (o Iniciales)</label>
-                                <input type="text" id="author" required class="w-full bg-black/40 border border-marian-500/50 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-marian-300 focus:border-transparent transition-all backdrop-blur-md" placeholder="Ej. Familia Pérez o Devoto">
+                                <!-- Añadido maxLength para evitar abusos -->
+                                <input type="text" id="author" required maxlength="50" class="w-full bg-black/40 border border-marian-500/50 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-marian-300 focus:border-transparent transition-all backdrop-blur-md" placeholder="Ej. Familia Pérez o Devoto">
                             </div>
                             <div class="mb-4">
                                 <label for="message" class="block text-sm font-medium text-marian-100 mb-1 drop-shadow">Intención de Oración</label>
-                                <textarea id="message" required rows="3" class="w-full bg-black/40 border border-marian-500/50 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-marian-300 focus:border-transparent transition-all resize-none backdrop-blur-md" placeholder="Oh Madre, te pido por..."></textarea>
+                                <textarea id="message" required maxlength="300" rows="3" class="w-full bg-black/40 border border-marian-500/50 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-marian-300 focus:border-transparent transition-all resize-none backdrop-blur-md text-base" placeholder="Oh Madre, te pido por..."></textarea>
                             </div>
-                            <button type="submit" class="w-full bg-marian-500 hover:bg-marian-400 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-300 shadow-lg shadow-marian-500/30 flex justify-center items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" /></svg>
+                            <button type="submit" class="w-full bg-marian-500 hover:bg-marian-400 active:bg-marian-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-300 shadow-lg shadow-marian-500/30 flex justify-center items-center gap-2 focus:outline-none focus:ring-2 focus:ring-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" /></svg>
                                 Depositar Intención
                             </button>
                         </form>
 
-                        <!-- Lista de Intenciones (Scrollable) -->
-                        <div class="flex-1 min-h-[200px] max-h-[300px] overflow-y-auto pr-2 relative z-10">
+                        <div class="flex-1 min-h-[200px] max-h-[300px] overflow-y-auto pr-2 relative z-10" aria-label="Lista de intenciones">
                             <div class="sticky top-0 w-full h-4 bg-gradient-to-b from-black/20 to-transparent z-10 pointer-events-none"></div>
                             <div id="intentions-list" class="space-y-4 pb-4">
-                                <!-- Testimonios Base / Iniciales -->
+                                <!-- Testimonios Base -->
                                 <div class="bg-black/40 backdrop-blur-md border border-white/10 p-4 rounded-xl shadow-lg">
-                                    <p class="font-serif text-white text-sm mb-2">"Madre, te damos gracias por el milagro de sanación de la ciudadana santarrosana, que nos abrió el camino para confiar en tu infinita misericordia."</p>
+                                    <p class="font-serif text-white text-sm mb-2">"Madre, te damos gracias por el milagro de sanación que nos abrió el camino para confiar en tu misericordia."</p>
                                     <p class="text-right text-xs text-marian-200 font-medium">- Testimonio Histórico</p>
                                 </div>
                                 <div class="bg-black/40 backdrop-blur-md border border-white/10 p-4 rounded-xl shadow-lg">
-                                    <p class="font-serif text-white text-sm mb-2">"Te pido por la paz de Colombia, por nuestros campos y por las vocaciones de la Diócesis de Santa Rosa de Osos."</p>
+                                    <p class="font-serif text-white text-sm mb-2">"Te pido por la paz de Colombia, por nuestros campos y por las vocaciones."</p>
                                     <p class="text-right text-xs text-marian-200 font-medium">- Comunidad Diocesana</p>
                                 </div>
                             </div>
@@ -423,51 +427,63 @@
         </div>
     </section>
 
-    <section class="py-20 bg-marian-50 reveal relative bg-fixed bg-cover bg-center" style="background-image: url('https://images.pexels.com/photos/39230601/pexels-photo-39230601.png');">
-        <!-- Capa de superposición clara -->
-        <div class="absolute inset-0 bg-marian-50/85 z-0"></div>
+    <section class="py-16 md:py-20 bg-marian-50 reveal relative bg-fixed bg-cover bg-center" style="background-image: url('https://images.pexels.com/photos/39230601/pexels-photo-39230601.png');">
+        <div class="absolute inset-0 bg-marian-50/90 z-0"></div>
 
         <div class="max-w-5xl mx-auto px-6 text-center relative z-10">
             <h2 class="text-3xl font-display text-marian-900 mb-4 drop-shadow-sm">El Legado de su Amor</h2>
-            <p class="text-marian-800 mb-12 font-serif font-medium drop-shadow-sm">Profundiza en la historia con este documental adicional.</p>
+            <p class="text-marian-800 mb-8 md:mb-12 font-serif font-medium drop-shadow-sm text-sm md:text-base">Profundiza en la historia con este documental adicional.</p>
             
-            <div class="bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl max-w-2xl mx-auto border border-marian-200">
-                <div class="aspect-video rounded-xl overflow-hidden">
-                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/ijRwsrxUV3E" title="Video Adicional Legado" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div class="bg-white/90 backdrop-blur-md p-2 md:p-3 rounded-2xl shadow-xl max-w-2xl mx-auto border border-marian-200">
+                <div class="aspect-video rounded-xl overflow-hidden bg-black">
+                    <iframe loading="lazy" class="w-full h-full" src="https://www.youtube.com/embed/ijRwsrxUV3E" title="Video Adicional Legado" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             </div>
-            <p class="mt-8 text-marian-600 text-sm italic">
-                "Si ha habido jamás un título... con el que el pueblo Cristiano haya invocado a María... tal es sin duda... Madre de las Misericordias" <br> <strong>- Papa Pablo VI</strong>
+            <p class="mt-8 text-marian-600 text-xs md:text-sm italic px-4">
+                "Si ha habido jamás un título... con el que el pueblo Cristiano haya invocado a María... tal es sin duda... Madre de las Misericordias" <br> <strong class="mt-2 inline-block">- Papa Pablo VI</strong>
             </p>
         </div>
     </section>
 
     <footer class="bg-marian-900 text-marian-300 py-10 text-center border-t border-marian-800 relative z-20">
         <div class="max-w-4xl mx-auto px-6">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto mb-4 text-marian-500" viewBox="0 0 20 20" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto mb-4 text-marian-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
             </svg>
-            <p class="font-serif mb-2 text-marian-100">Santuario de Nuestra Señora de las Misericordias</p>
+            <p class="font-serif mb-2 text-marian-100 text-lg">Santuario de Nuestra Señora de las Misericordias</p>
             <p class="text-sm font-light">Santa Rosa de Osos, Antioquia, Colombia.</p>
             <p class="text-xs mt-6 opacity-60">Creado por Pastoral y Bienestar - Fundación Universitaria Católica del Norte</p>
         </div>
     </footer>
 
     <script>
-        // --- Intersect Observer para Animaciones de Scroll (Reveal) ---
-        function reveal() {
-            var reveals = document.querySelectorAll(".reveal");
-            for (var i = 0; i < reveals.length; i++) {
-                var windowHeight = window.innerHeight;
-                var elementTop = reveals[i].getBoundingClientRect().top;
-                var elementVisible = 100;
-                if (elementTop < windowHeight - elementVisible) {
-                    reveals[i].classList.add("active");
+        // --- Intersect Observer Optimizado ---
+        function initReveal() {
+            const reveals = document.querySelectorAll(".reveal");
+            
+            // Creamos un observador nativo de alta eficiencia
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("active");
+                        // Una vez mostrado el elemento, dejamos de observarlo para ahorrar batería
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, {
+                // Se activa cuando el elemento está a punto de entrar 50px en la pantalla
+                rootMargin: "0px 0px -50px 0px" 
+            });
+
+            reveals.forEach(element => {
+                observer.observe(element);
+                
+                // Respaldo de seguridad: si el elemento ya está visible al abrir la página, lo activamos
+                if (element.getBoundingClientRect().top < window.innerHeight) {
+                    element.classList.add("active");
                 }
-            }
+            });
         }
-        window.addEventListener("scroll", reveal);
-        reveal(); // Llamada inicial
 
         // --- Sistema de Notificaciones (Toasts) ---
         function showToast(message, type = 'success') {
@@ -476,10 +492,11 @@
             
             const bgClass = type === 'success' ? 'bg-marian-600' : 'bg-yellow-600';
             
-            toast.className = `${bgClass} text-white px-6 py-3 rounded-lg shadow-xl flex items-center gap-3 transform transition-all duration-500 opacity-0 translate-x-10`;
+            toast.className = `${bgClass} text-white px-4 md:px-6 py-3 rounded-lg shadow-xl flex items-center gap-3 transform transition-all duration-500 opacity-0 translate-x-10 text-sm md:text-base w-max max-w-[90vw]`;
+            toast.setAttribute('role', 'alert');
             
             toast.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                 </svg>
                 <span class="font-medium">${message}</span>
@@ -487,9 +504,12 @@
             
             container.appendChild(toast);
             
-            setTimeout(() => {
-                toast.classList.remove('opacity-0', 'translate-x-10');
-            }, 10);
+            // Trigger animaciones
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    toast.classList.remove('opacity-0', 'translate-x-10');
+                }, 10);
+            });
             
             setTimeout(() => {
                 toast.classList.add('opacity-0', 'translate-x-10');
@@ -498,7 +518,7 @@
                         container.removeChild(toast);
                     }
                 }, 500);
-            }, 3000);
+            }, 3500); // Un poco más de tiempo para lectura en móviles
         }
 
         // --- Lógica de la Vela Virtual ---
@@ -509,15 +529,17 @@
             
             if (!isCandleLit) {
                 container.classList.add('candle-lit');
-                statusText.textContent = "Tu vela está iluminando el Santuario";
+                container.setAttribute('aria-pressed', 'true');
+                statusText.textContent = "Tu vela ilumina el Santuario";
                 statusText.classList.add('text-yellow-400');
                 isCandleLit = true;
-                showToast("Has encendido la vela virtual de tu corazón.");
+                showToast("Has encendido tu vela virtual.");
                 
                 localStorage.setItem('virtualPilgrimageCandle', 'lit');
             } else {
                 container.classList.remove('candle-lit');
-                statusText.textContent = "Vela apagada. Haz clic para encender.";
+                container.setAttribute('aria-pressed', 'false');
+                statusText.textContent = "Vela apagada. Toca para encender.";
                 statusText.classList.remove('text-yellow-400');
                 isCandleLit = false;
                 localStorage.setItem('virtualPilgrimageCandle', 'unlit');
@@ -526,30 +548,46 @@
 
         // --- Lógica del Muro de Intenciones ---
         function loadIntentions() {
-            const stored = localStorage.getItem('virtualPilgrimageIntentions');
-            if (stored) {
-                const intentions = JSON.parse(stored);
-                const list = document.getElementById('intentions-list');
+            try {
+                const stored = localStorage.getItem('virtualPilgrimageIntentions');
+                if (stored) {
+                    const intentions = JSON.parse(stored);
+                    const list = document.getElementById('intentions-list');
+                    
+                    intentions.forEach(int => {
+                        const el = createIntentionElement(int.author, int.message, int.date);
+                        list.insertBefore(el, list.children[2]); 
+                    });
+                }
                 
-                intentions.forEach(int => {
-                    const el = createIntentionElement(int.author, int.message, int.date);
-                    list.insertBefore(el, list.children[2]); 
-                });
+                if(localStorage.getItem('virtualPilgrimageCandle') === 'lit') {
+                    lightCandle();
+                }
+            } catch(e) {
+                console.error("Error cargando el almacenamiento local", e);
             }
-            
-            if(localStorage.getItem('virtualPilgrimageCandle') === 'lit') {
-                lightCandle();
-            }
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag] || tag)
+            );
         }
 
         function createIntentionElement(author, message, dateStr) {
             const div = document.createElement('div');
-            div.className = "bg-black/40 backdrop-blur-md border border-white/10 p-4 rounded-xl animate-fade-in-up shadow-lg";
+            div.className = "bg-black/40 backdrop-blur-md border border-white/10 p-4 rounded-xl animate-fade-in-up shadow-lg break-words";
             div.innerHTML = `
-                <p class="font-serif text-white text-sm mb-3">"${message}"</p>
+                <p class="font-serif text-white text-sm md:text-base mb-3">"${escapeHTML(message)}"</p>
                 <div class="flex justify-between items-center text-xs text-marian-200">
-                    <span class="font-medium">- ${author}</span>
-                    <span class="opacity-70">${dateStr}</span>
+                    <span class="font-medium">- ${escapeHTML(author)}</span>
+                    <span class="opacity-70">${escapeHTML(dateStr)}</span>
                 </div>
             `;
             return div;
@@ -573,51 +611,66 @@
             
             list.scrollTo({ top: 0, behavior: 'smooth' });
 
-            let intentions = [];
-            const stored = localStorage.getItem('virtualPilgrimageIntentions');
-            if (stored) intentions = JSON.parse(stored);
-            
-            intentions.unshift({ author, message, date: dateStr });
-            if(intentions.length > 20) intentions.pop(); 
-            
-            localStorage.setItem('virtualPilgrimageIntentions', JSON.stringify(intentions));
+            try {
+                let intentions = [];
+                const stored = localStorage.getItem('virtualPilgrimageIntentions');
+                if (stored) intentions = JSON.parse(stored);
+                
+                intentions.unshift({ author, message, date: dateStr });
+                if(intentions.length > 20) intentions.pop(); 
+                
+                localStorage.setItem('virtualPilgrimageIntentions', JSON.stringify(intentions));
+            } catch(e) {
+                console.error("No se pudo guardar la intención", e);
+            }
 
             authorInput.value = '';
             messageInput.value = '';
+            
+            // Cerrar teclado en móviles quitando el foco
+            document.activeElement.blur();
             showToast("Intención depositada con devoción.");
         }
 
-        // --- Animación 3D de Partículas (Polvo Dorado) ---
+        // --- Animación 3D de Partículas (Optimizada para móviles) ---
         function initThreeJS() {
             const canvas = document.getElementById('bg-canvas');
             if(!canvas || typeof THREE === 'undefined') return;
 
             const scene = new THREE.Scene();
-            // Cámara
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            
+            // Habilitamos powerPreference para salvar batería en móviles
+            const renderer = new THREE.WebGLRenderer({ 
+                canvas: canvas, 
+                alpha: true, 
+                antialias: false, // Apagado en móviles para mayor FPS
+                powerPreference: "low-power" 
+            });
             
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
+            // Limitamos el pixel ratio a 2 para evitar que pantallas super retina consuman demasiados recursos
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             
-            // Geometría y material de las partículas
+            // Reducimos partículas en pantallas más pequeñas
+            const isMobile = window.innerWidth < 768;
+            const particlesCount = isMobile ? 80 : 150; 
+            
             const particlesGeometry = new THREE.BufferGeometry();
-            const particlesCount = 200; // Número de motas de luz
             const posArray = new Float32Array(particlesCount * 3);
             
             for(let i = 0; i < particlesCount * 3; i++) {
-                // Distribuimos las partículas al azar
-                posArray[i] = (Math.random() - 0.5) * 20; // x, y, z
+                posArray[i] = (Math.random() - 0.5) * 20; 
             }
             
             particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
             
             const particlesMaterial = new THREE.PointsMaterial({
-                size: 0.04,
-                color: 0xffd700, // Color Dorado
+                size: isMobile ? 0.05 : 0.04,
+                color: 0xffd700, 
                 transparent: true,
                 opacity: 0.5,
-                blending: THREE.AdditiveBlending // Para que brillen al cruzarse
+                blending: THREE.AdditiveBlending 
             });
             
             const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
@@ -625,42 +678,64 @@
             
             camera.position.z = 5;
             
-            // Función de loop para animarlas
+            // Pausar animación si la pestaña no está visible
+            let animationId;
             function animate() {
-                requestAnimationFrame(animate);
+                animationId = requestAnimationFrame(animate);
                 
-                // Rotación suave del conjunto
-                particlesMesh.rotation.y += 0.0005;
-                particlesMesh.rotation.x += 0.0002;
+                particlesMesh.rotation.y += 0.0003;
+                particlesMesh.rotation.x += 0.0001;
                 
-                // Hacer que floten hacia arriba
                 const positions = particlesMesh.geometry.attributes.position.array;
                 for(let i = 1; i < particlesCount * 3; i += 3) {
-                    positions[i] += 0.005; // Velocidad de subida
-                    if(positions[i] > 10) { // Si suben mucho, las regresamos abajo
+                    positions[i] += 0.004; 
+                    if(positions[i] > 10) { 
                         positions[i] = -10;
                     }
                 }
                 particlesMesh.geometry.attributes.position.needsUpdate = true;
-                
                 renderer.render(scene, camera);
             }
             
-            animate();
-            
-            // Ajustar el canvas si cambian el tamaño de la pantalla
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
+            // Intersección Observer para pausar Three.js si el canvas no se ve (ahorro extremo de batería)
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animate();
+                    } else {
+                        cancelAnimationFrame(animationId);
+                    }
+                });
             });
+            observer.observe(document.body);
+            
+            // Redimensionado optimizado con timeout
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                }, 200);
+            }, { passive: true });
         }
 
-        // --- Carga Inicial ---
-        window.onload = () => {
+        // --- Inicialización Segura ---
+        window.addEventListener('DOMContentLoaded', () => {
             loadIntentions();
-            initThreeJS(); // Inicializamos el 3D
-        };
+            initReveal();
+            // Retrasar Three.js significativamente (2.5s) para que el celular procese la imagen primero sin tirones
+            setTimeout(() => {
+                initThreeJS();
+                const canvas = document.getElementById('bg-canvas');
+                if(canvas) {
+                    // Animamos la opacidad a 1 para que aparezca suavemente
+                    canvas.classList.remove('opacity-0');
+                    canvas.classList.add('opacity-100');
+                }
+            }, 2500); 
+        });
     </script>
 </body>
 </html>
