@@ -8,6 +8,9 @@
     
     <!-- Script de Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -460,6 +463,73 @@
         </div>
     </section>
 
+    <section id="certificado-peregrinacion" class="py-20 bg-white relative overflow-hidden border-t-8 border-marian-100">
+        <div class="absolute inset-0 z-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#006ec8 1px, transparent 1px); background-size: 20px 20px;"></div>
+        
+        <div class="max-w-5xl mx-auto px-6 relative z-10 reveal">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-5xl font-display text-marian-900 mb-4">Tu Recuerdo Espiritual</h2>
+                <p class="text-marian-700 font-serif text-base md:text-lg">Genera y descarga tu certificado para compartirlo en tus estados de WhatsApp o Instagram.</p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-12 items-center justify-center">
+                <!-- Formulario -->
+                <div class="w-full lg:w-1/3 bg-marian-50 p-6 md:p-8 rounded-3xl shadow-xl border border-marian-200">
+                    <div class="mb-6 text-marian-600 flex justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    </div>
+                    <label for="nombre-certificado" class="block text-sm font-medium text-marian-800 mb-2">Ingresa tu Nombre:</label>
+                    <input type="text" id="nombre-certificado" class="w-full bg-white border-2 border-marian-200 rounded-xl px-4 py-3 text-marian-900 focus:outline-none focus:ring-2 focus:ring-marian-500 focus:border-transparent mb-6 transition-all" placeholder="Ej. Familia Pérez o Devoto">
+                    
+                    <button onclick="generarCertificado()" class="w-full bg-yellow-500 hover:bg-yellow-400 active:bg-yellow-600 text-yellow-950 font-bold py-3.5 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-yellow-500/30 flex justify-center items-center gap-2 transform hover:-translate-y-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        Descargar Certificado
+                    </button>
+                    <p class="text-xs text-marian-600 mt-4 text-center">Se guardará como imagen en tu dispositivo, perfecta para historias y estados.</p>
+                </div>
+
+                <!-- Diseño del Certificado (Formato 9:16 ideal para estados) -->
+                <div class="w-full lg:w-auto flex justify-center">
+                    <!-- Contenedor con tamaño fijo para garantizar resolución de exportación, escalado visualmente con CSS en pantallas pequeñas -->
+                    <div class="relative scale-[0.85] sm:scale-100 origin-top">
+                        <div id="nodo-certificado" class="w-[360px] h-[640px] bg-gradient-to-b from-[#f8fafc] via-[#ffffff] to-[#f0f7ff] shadow-2xl relative overflow-hidden flex flex-col items-center justify-center text-center px-8 py-10">
+                            <!-- Decoración de bordes dorados -->
+                            <div class="absolute inset-3 border-4 border-double border-yellow-500/60 rounded-lg pointer-events-none"></div>
+                            <div class="absolute inset-5 border border-yellow-400/30 rounded pointer-events-none"></div>
+                            
+                            <!-- Esquinas decorativas -->
+                            <div class="absolute top-3 left-3 w-6 h-6 border-t-2 border-l-2 border-yellow-600 pointer-events-none"></div>
+                            <div class="absolute top-3 right-3 w-6 h-6 border-t-2 border-r-2 border-yellow-600 pointer-events-none"></div>
+                            <div class="absolute bottom-3 left-3 w-6 h-6 border-b-2 border-l-2 border-yellow-600 pointer-events-none"></div>
+                            <div class="absolute bottom-3 right-3 w-6 h-6 border-b-2 border-r-2 border-yellow-600 pointer-events-none"></div>
+
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-yellow-600 mb-6 drop-shadow-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M8 6h8"/></svg>
+                            
+                            <h3 class="font-display text-2xl text-marian-900 mb-2 leading-tight px-2">Nuestra Señora de las Misericordias</h3>
+                            <h4 class="font-serif text-sm text-marian-700 italic mb-8 px-2">"¡Compadece mis miserias con tu gran misericordia!"</h4>
+                            
+                            <div class="w-16 h-px bg-yellow-500/50 mb-6"></div>
+                            
+                            <p class="text-xs text-gray-500 uppercase tracking-widest font-semibold mb-2">Certificado de Peregrinación</p>
+                            <p class="text-sm text-gray-600 mb-6">Otorgado con fe y gratitud a:</p>
+                            
+                            <!-- Nombre Dinámico -->
+                            <p id="cert-nombre-display" class="font-display text-2xl text-marian-800 font-bold mb-6 border-b border-yellow-500/50 pb-2 min-w-[220px] max-w-[280px] break-words line-clamp-2">[Tu Nombre Aquí]</p>
+                            
+                            <p class="text-sm text-gray-700 italic font-serif leading-relaxed mb-10 px-2">Por haber completado su visita espiritual, encendido la luz de la esperanza y depositado su intención a los pies de la Madre.</p>
+                            
+                            <div class="mt-auto">
+                                <p id="cert-fecha-display" class="text-xs font-bold text-marian-900 bg-marian-100/80 px-4 py-2 rounded-full border border-marian-200">Día, Mes Año</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <footer class="bg-marian-900 text-marian-300 py-10 text-center border-t border-marian-800 relative z-20">
         <div class="max-w-4xl mx-auto px-6">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto mb-4 text-marian-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -633,6 +703,54 @@
                 p.style.animationDuration = (Math.random() * 10 + 15) + 's'; 
                 
                 container.appendChild(p);
+            }
+        }
+
+        function generarCertificado() {
+            const input = document.getElementById('nombre-certificado');
+            const nombre = input.value.trim();
+            
+            if(!nombre) {
+                showToast('Por favor, ingresa tu nombre para el certificado.', 'warning');
+                input.focus();
+                return;
+            }
+
+            // Actualizar textos en el nodo del certificado
+            document.getElementById('cert-nombre-display').innerText = nombre;
+            
+            const opcionesFecha = { year: 'numeric', month: 'long', day: 'numeric' };
+            const fechaActual = new Date().toLocaleDateString('es-ES', opcionesFecha);
+            document.getElementById('cert-fecha-display').innerText = fechaActual;
+
+            showToast('Generando tu certificado...', 'success');
+
+            const nodo = document.getElementById('nodo-certificado');
+            
+            // Asegurarnos de que html2canvas está cargado
+            if(typeof html2canvas !== 'undefined') {
+                // Retraso de 150ms para permitir que el DOM actualice el texto antes de capturar
+                setTimeout(() => {
+                    html2canvas(nodo, {
+                        scale: 3, // Resolución x3 para que se vea súper nítido en estados (1080x1920 proporciones)
+                        backgroundColor: '#ffffff',
+                        logging: false
+                    }).then(canvas => {
+                        const link = document.createElement('a');
+                        // Nombre de archivo amigable
+                        const nombreArchivo = nombre.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+                        link.download = `Santuario_${nombreArchivo || 'Peregrino'}.jpg`;
+                        link.href = canvas.toDataURL('image/jpeg', 0.95); // Alta calidad JPG
+                        link.click();
+                        
+                        showToast('¡Certificado descargado! Listo para tus estados.');
+                    }).catch(err => {
+                        console.error("Error en html2canvas:", err);
+                        showToast('Hubo un problema al generar la imagen.', 'warning');
+                    });
+                }, 150);
+            } else {
+                showToast('Aún cargando herramientas, intenta en un momento.', 'warning');
             }
         }
 
